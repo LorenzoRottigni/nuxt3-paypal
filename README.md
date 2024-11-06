@@ -1,13 +1,4 @@
-<!--
-Get your module up and running quickly.
-
-Find and replace all on all files (CMD+SHIFT+F):
-- Name: My Module
-- Package name: nuxt3-paypal
-- Description: My new Nuxt module
--->
-
-# My Module
+# nuxt3-paypal
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
@@ -35,7 +26,7 @@ Install the module to your Nuxt application with one command:
 npx nuxi module add nuxt3-paypal
 ```
 
-That's it! You can now use My Module in your Nuxt app ✨
+That's it! You can now use nuxt3-paypal in your Nuxt app ✨
 
 
 ## Contribution
