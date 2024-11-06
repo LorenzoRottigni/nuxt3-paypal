@@ -13,13 +13,12 @@ export default defineNuxtModule<ModuleOptions>({
   },
   defaults: {
     client: {
-      clientId: '',
+      clientId: 'Abg55Ty5D6a9Eihn_ANCzJ6lkpJljfCyody6cFvR6P-YEk_IIqPtFAasOHBTD2vPFXfPMlwtyPEHlRoH',
     },
     buttons: [
       { fundingSource: 'paypal' },
       { fundingSource: 'paylater' },
     ],
-    button: { fundingSource: 'paypal' },
   },
   setup(options, nuxt) {
     nuxt.options.runtimeConfig.public.paypal = options

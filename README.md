@@ -88,6 +88,27 @@ Pre-configured setup using nuxt.config.ts
 </template>
 ```
 
+It's possible to customize easily the styles of the PaypalCheckout and PaypalButton using the CSS class .paypal-client:
+```css
+/* paypal button sized & centered */
+.paypal-client {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* paypal checkout pair of buttons*/
+.paypal-client {
+  display: flex;
+  gap: 2rem;
+}
+
+/* paypal checkout buttons grid*/
+.paypal-client {
+  display: grid;
+  gap: 2rem;
+}
+```
+
 ## Configuration
 
 nuxt3-paypal wraps three main configuration types that can be used in both nuxt.config.ts and as props in components:
