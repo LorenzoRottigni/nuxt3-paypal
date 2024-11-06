@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import type {
   OnApproveActions,
   OnApproveData,
@@ -16,11 +16,12 @@ import type {
   OrderResponseBody,
 } from '@paypal/paypal-js'
 import { usePaypal } from '../composables/usePaypal'
-import { useNuxtApp } from '#app'
+import type { ModuleOptions } from '../../module'
+import { useNuxtApp, useRuntimeConfig } from '#app'
 
 const props = defineProps<{
-  button: PayPalButtonsComponentOptions
-  options?: PayPalScriptOptions
+  button?: PayPalButtonsComponentOptions
+  client?: PayPalScriptOptions
   order: CreateOrderRequestBody
 }>()
 
@@ -37,6 +38,7 @@ const { $paypal } = useNuxtApp()
 
 const paypalEl = ref<HTMLDivElement | null>(null)
 const paypalClient = ref<PayPalNamespace | null>($paypal as PayPalNamespace)
+const paypalButton = computed(() => props.button || (useRuntimeConfig().public.paypal as ModuleOptions).buttons?.[0])
 
 async function createOrder(data: CreateOrderData, actions: CreateOrderActions) {
   const result = await actions.order.create(props.order)
@@ -50,13 +52,13 @@ async function onApprove(metadata: OnApproveData, actions: OnApproveActions) {
 }
 
 async function init() {
-  if (props.options) {
-    const paypal = await usePaypal(props.options)
+  if (props.client) {
+    const paypal = await usePaypal(props.client)
     if (!paypal) return
     paypalClient.value = paypal
   }
   const blueprint = paypalClient.value.Buttons({
-    ...props.button,
+    ...paypalButton.value,
     onCancel: (metadata: Record<string, unknown>, actions: OnCancelledActions) => emits('onCancel', metadata, actions),
     onError: (err: Record<string, unknown>) => emits('onError', err),
     onInit: (metadata: Record<string, unknown>, actions: OnInitActions) => emits('onInit', metadata, actions),
@@ -65,7 +67,7 @@ async function init() {
     onApprove,
   })
   if (!blueprint?.isEligible() || !paypalEl.value) {
-    console.warn(`[paypal]: The paypal button ${props.button.fundingSource} is not eligible to be rendered`)
+    console.warn(`[paypal]: The paypal button ${paypalButton.value.fundingSource} is not eligible to be rendered`)
     return
   }
   await blueprint.render(paypalEl.value)

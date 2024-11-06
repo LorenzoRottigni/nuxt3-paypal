@@ -21,7 +21,7 @@ import { useNuxtApp, useRuntimeConfig } from '#app'
 
 const props = defineProps<{
   buttons?: PayPalButtonsComponentOptions[]
-  options?: PayPalScriptOptions
+  client?: PayPalScriptOptions
   order: CreateOrderRequestBody
 }>()
 
@@ -52,8 +52,8 @@ async function onApprove(metadata: OnApproveData, actions: OnApproveActions) {
 }
 
 async function init() {
-  if (props.options) {
-    const paypal = await usePaypal(props.options)
+  if (props.client) {
+    const paypal = await usePaypal(props.client)
     if (!paypal) return
     paypalClient.value = paypal
   }
