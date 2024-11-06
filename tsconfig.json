@@ -4,13 +4,5 @@
     "dist",
     "node_modules",
     "playground",
-  ],
-  "compilerOptions": {
-    "module": "NodeNext",
-    "paths": {
-      "#app": [
-        "./node_modules/nuxt/dist/app/index"
-      ]
-    }
-  }
+  ]
 }

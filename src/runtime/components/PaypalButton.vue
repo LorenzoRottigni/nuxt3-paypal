@@ -16,7 +16,6 @@ import type {
   OrderResponseBody,
 } from '@paypal/paypal-js'
 import { usePaypal } from '../composables/usePaypal'
-import type { ModuleOptions } from '../../module'
 import { useNuxtApp, useRuntimeConfig } from '#app'
 
 const props = defineProps<{
@@ -27,7 +26,7 @@ const props = defineProps<{
 
 const emits = defineEmits<{
   (e: 'onCreate', data: CreateOrderData, actions: CreateOrderActions, result: string): void
-  (e: 'onApprove', metadata: OnApproveData, actions: OnApproveActions, data: OrderResponseBody): void
+  (e: 'onApprove', metadata: OnApproveData, actions: OnApproveActions, data?: OrderResponseBody): void
   (e: 'onCancel', metadata: Record<string, unknown>, actions: OnCancelledActions): void
   (e: 'onError', err: Record<string, unknown>): void
   (e: 'onInit', metadata: Record<string, unknown>, actions: OnInitActions): void
@@ -37,8 +36,8 @@ const emits = defineEmits<{
 const { $paypal } = useNuxtApp()
 
 const paypalEl = ref<HTMLDivElement | null>(null)
-const paypalClient = ref<PayPalNamespace | null>($paypal as PayPalNamespace)
-const paypalButton = computed(() => props.button || (useRuntimeConfig().public.paypal as ModuleOptions).buttons?.[0])
+const paypalClient = ref<PayPalNamespace | null>($paypal)
+const paypalButton = computed<PayPalButtonsComponentOptions>(() => props.button || useRuntimeConfig().public.paypal.buttons?.[0])
 
 async function createOrder(data: CreateOrderData, actions: CreateOrderActions) {
   const result = await actions.order.create(props.order)
@@ -57,6 +56,7 @@ async function init() {
     if (!paypal) return
     paypalClient.value = paypal
   }
+  if (!paypalClient.value?.Buttons) return
   const blueprint = paypalClient.value.Buttons({
     ...paypalButton.value,
     onCancel: (metadata: Record<string, unknown>, actions: OnCancelledActions) => emits('onCancel', metadata, actions),
