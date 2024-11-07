@@ -27,7 +27,7 @@ Install the module to your Nuxt application with one command:
 npx nuxi module add nuxt3-paypal
 ```
 
-### Packet Managers
+### Package Managers
 
 ```bash
 # npm
@@ -53,12 +53,12 @@ nuxt.config.ts:
 ### Retrieving the Paypal Client
 
 ```typescript
-# using nuxt.config.ts
+// using nuxt.config.ts
 const paypal = await usePaypal()
-# using inline config
+// using inline config
 const paypal = await usePaypal(options)
 
-# using nuxt3-paypal injected nuxt plugin (pre-instantiated)
+// using nuxt3-paypal injected nuxt plugin (pre-instantiated)
 const { $paypal } = useNuxtApp()
 ```
 
